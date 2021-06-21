@@ -94,7 +94,6 @@ class ImgEncoderTextEncoderBase(ImgTextCompositionBase):
 
   def __init__(self, texts, embed_dim):
     super(ImgEncoderTextEncoderBase, self).__init__()
-
     # img model
     img_model = torchvision.models.resnet18(pretrained=True)
 

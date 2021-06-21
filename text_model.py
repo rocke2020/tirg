@@ -94,12 +94,12 @@ class TextLSTMModel(torch.nn.Module):
     assert type(x[0][0]) is int
     return self.forward_encoded_texts(x)
 
-  def forward_encoded_texts(self, texts):
+  def forward_encoded_texts(self, batches_tokens):
     # to tensor
-    lengths = [len(t) for t in texts]
-    itexts = torch.zeros((np.max(lengths), len(texts))).long()
-    for i in range(len(texts)):
-      itexts[:lengths[i], i] = torch.tensor(texts[i])
+    lengths = [len(t) for t in batches_tokens]
+    itexts = torch.zeros((np.max(lengths), len(batches_tokens))).long()
+    for i in range(len(batches_tokens)):
+      itexts[:lengths[i], i] = torch.tensor(batches_tokens[i])
 
     # embed words
     itexts = torch.autograd.Variable(itexts).cuda()
@@ -110,7 +110,7 @@ class TextLSTMModel(torch.nn.Module):
 
     # get last output (using length)
     text_features = []
-    for i in range(len(texts)):
+    for i in range(len(batches_tokens)):
       text_features.append(lstm_output[lengths[i] - 1, i, :])
 
     # output
